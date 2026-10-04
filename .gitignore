@@ -1,0 +1,7 @@
+# mete todos los archivos y carpetas que no quieres subir a tu repositorio
+node_modules/
+dist/
+.env
+.angular/
+*.log
+
