@@ -1,0 +1,57 @@
+### Variables
+@api = http://localhost:3000/api
+
+### Listar negocios
+GET {{api}}/negocios
+
+### Crear negocio (debe responder 201)
+POST {{api}}/negocios
+Content-Type: application/json
+
+{
+  "nombre": "Frappés La Esquina",
+  "slug": "frappes-la-esquina",
+  "whatsapp": "+50212345678",
+  "direccion": "Zona 1, Ciudad de Guatemala"
+}
+
+### Ver un negocio
+GET {{api}}/negocios/1
+
+### Editar solo el color (debe responder 200)
+PATCH {{api}}/negocios/1
+Content-Type: application/json
+
+{
+  "color_primario": "#2E7D32"
+}
+
+### Desactivar negocio
+DELETE {{api}}/negocios/1
+
+### ---------- Pruebas de errores ----------
+
+### Slug repetido (debe responder 409)
+POST {{api}}/negocios
+Content-Type: application/json
+
+{
+  "nombre": "Otra tienda",
+  "slug": "frappes-la-esquina"
+}
+
+### Datos inválidos (debe responder 400 con detalles)
+POST {{api}}/negocios
+Content-Type: application/json
+
+{
+  "nombre": "X",
+  "slug": "Mi Tienda",
+  "color_primario": "verde"
+}
+
+### Negocio que no existe (debe responder 404)
+GET {{api}}/negocios/9999
+
+### Id inválido (debe responder 400)
+GET {{api}}/negocios/abc
