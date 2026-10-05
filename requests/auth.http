@@ -1,0 +1,36 @@
+@api = http://localhost:3000/api
+
+### Login correcto (cambia los datos por los de tu superadmin)
+# @name login
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@menu.test",
+  "password": "sanchez006"
+}
+
+### Guardamos el token de la respuesta anterior
+@token = {{login.response.body.token}}
+
+### Mi perfil (con token, debe responder 200)
+GET {{api}}/auth/me
+Authorization: Bearer {{token}}
+
+### ---------- Pruebas de errores ----------
+
+### Contraseña incorrecta (debe responder 401)
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@menu.test",
+  "password": "incorrecta"
+}
+
+### Perfil sin token (debe responder 401)
+GET {{api}}/auth/me
+
+### Token alterado (debe responder 401)
+GET {{api}}/auth/me
+Authorization: Bearer token.falso.123

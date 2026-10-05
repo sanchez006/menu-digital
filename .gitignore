@@ -4,4 +4,4 @@ dist/
 .env
 .angular/
 *.log
-
+CLAUDE.md

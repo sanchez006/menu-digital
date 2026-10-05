@@ -1,25 +1,40 @@
-### Variables
 @api = http://localhost:3000/api
 
-### Listar negocios
-GET {{api}}/negocios
-
-### Crear negocio (debe responder 201)
-POST {{api}}/negocios
+### Primero inicia sesión (cambia los datos por los de tu superadmin)
+# @name login
+POST {{api}}/auth/login
 Content-Type: application/json
 
 {
-  "nombre": "Frappés La Esquina",
-  "slug": "frappes-la-esquina",
-  "whatsapp": "+50212345678",
-  "direccion": "Zona 1, Ciudad de Guatemala"
+  "email": "tu_correo@ejemplo.com",
+  "password": "tu_contraseña"
+}
+
+###
+@token = {{login.response.body.token}}
+
+### Listar negocios
+GET {{api}}/negocios
+Authorization: Bearer {{token}}
+
+### Crear negocio (debe responder 201)
+POST {{api}}/negocios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Licuados Don Pepe",
+  "slug": "licuados-don-pepe",
+  "whatsapp": "+50287654321"
 }
 
 ### Ver un negocio
 GET {{api}}/negocios/1
+Authorization: Bearer {{token}}
 
-### Editar solo el color (debe responder 200)
+### Editar solo el color
 PATCH {{api}}/negocios/1
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -28,20 +43,26 @@ Content-Type: application/json
 
 ### Desactivar negocio
 DELETE {{api}}/negocios/1
+Authorization: Bearer {{token}}
 
 ### ---------- Pruebas de errores ----------
 
+### Sin token (debe responder 401)
+GET {{api}}/negocios
+
 ### Slug repetido (debe responder 409)
 POST {{api}}/negocios
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
   "nombre": "Otra tienda",
-  "slug": "frappes-la-esquina"
+  "slug": "licuados-don-pepe"
 }
 
-### Datos inválidos (debe responder 400 con detalles)
+### Datos inválidos (debe responder 400)
 POST {{api}}/negocios
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -52,6 +73,4 @@ Content-Type: application/json
 
 ### Negocio que no existe (debe responder 404)
 GET {{api}}/negocios/9999
-
-### Id inválido (debe responder 400)
-GET {{api}}/negocios/abc
+Authorization: Bearer {{token}}
